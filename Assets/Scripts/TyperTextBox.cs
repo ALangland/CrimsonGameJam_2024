@@ -29,21 +29,26 @@ public class TyperTextBox : MonoBehaviour
 
     void Start()
     {
-        textbox = GetComponent<TextMeshProUGUI>();
-        audioSource = GetComponent<AudioSource>();
-        characterDelay = new WaitForSeconds(1.0f / charactersPerSecond);
-        slowCharacterDelay = new WaitForSeconds(1.0f / slowCharactersPerSecond);
-        inputCharDelay = new WaitForSeconds(1.0f / inputCharSpeed);
-        initialDelay = new WaitForSeconds(initialDelayTime);
-        textbox.text = string.Empty;
-        inputCharCoroutine = StartCoroutine(BlinkingCursor());
-        typingCoroutine = StartCoroutine(StartTyping()); 
+        
     }
 
 
     void Update()
     {
         
+    }
+
+    public void onShow()
+    {
+        textbox = GetComponent<TextMeshProUGUI>();
+        audioSource = GameObject.Find("SfxPlayer").GetComponent<AudioSource>();
+        characterDelay = new WaitForSeconds(1.0f / charactersPerSecond);
+        slowCharacterDelay = new WaitForSeconds(1.0f / slowCharactersPerSecond);
+        inputCharDelay = new WaitForSeconds(1.0f / inputCharSpeed);
+        initialDelay = new WaitForSeconds(initialDelayTime);
+        textbox.text = string.Empty;
+        typingCoroutine = StartCoroutine(StartTyping());
+        inputCharCoroutine = StartCoroutine(BlinkingCursor());
     }
 
     private IEnumerator StartTyping()
@@ -59,7 +64,7 @@ public class TyperTextBox : MonoBehaviour
             if (fullText.Substring(currentCharacterIndex).StartsWith("[slow]"))
             {
                 slowTyping = true;
-                currentCharacterIndex += "[fast]".Length;
+                currentCharacterIndex += "[slow]".Length;
                 continue;
             }
             else if (fullText.Substring(currentCharacterIndex).StartsWith("[normal]"))
